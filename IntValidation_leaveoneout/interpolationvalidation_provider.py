@@ -65,7 +65,7 @@ class InterpolationValidationProvider(QgsProcessingProvider):
         string should be a unique, short, character only string, eg "qgis" or
         "gdal". This string should not be localised.
         """
-        return 'interpolation validation'
+        return 'LeaveoneoutValidation'
 
     def name(self):
         """
@@ -74,7 +74,7 @@ class InterpolationValidationProvider(QgsProcessingProvider):
 
         This string should be short (e.g. "Lastools") and localised.
         """
-        return self.tr('interpolation validation')
+        return self.tr('Leave one out Validation')
 
     def icon(self):
         """
