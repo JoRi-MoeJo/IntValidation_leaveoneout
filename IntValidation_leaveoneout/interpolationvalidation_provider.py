@@ -31,8 +31,8 @@ __copyright__ = '(C) 2021 by Johannes Ritter'
 __revision__ = '$Format:%H$'
 
 from qgis.core import QgsProcessingProvider
-from .thinplatesplinetin_lou_algorithm import ThinplatesplineLouAlgorithm
-from .cubicspline_lou_algorithm import CubicsplineLouAlgorithm
+from .algorithms.thinplatesplinetin_lou_algorithm import ThinplatesplineLouAlgorithm
+from .algorithms.cubicspline_lou_algorithm import CubicsplineLouAlgorithm
 
 
 class InterpolationValidationProvider(QgsProcessingProvider):
