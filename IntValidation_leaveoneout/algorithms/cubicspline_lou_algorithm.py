@@ -93,7 +93,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
                 self.tr("Minimum number of points"),
                 QgsProcessingParameterNumber.Integer,
                 defaultValue=3,
-                minimumValue=0
+                minValue=0
             )
         )
 
@@ -103,8 +103,8 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
                 self.tr("Maximum number of points"),
                 QgsProcessingParameterNumber.Integer,
                 defaultValue=20,
-                minimumValue=11,
-                maximumValue=59
+                minValue=11,
+                maxValue=59
             )
         )
 
@@ -114,7 +114,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
                 self.tr("Number of points per quadrant"),
                 QgsProcessingParameterNumber.Double,
                 defaultValue=5,
-                minimumValue=1
+                minValue=1
             )
         )
 
@@ -124,7 +124,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
                 self.tr("Tolerance"),
                 QgsProcessingParameterNumber.Integer,
                 defaultValue=140,
-                minimumValue=0
+                minValue=0
             )
         )
         
