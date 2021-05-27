@@ -332,7 +332,7 @@ class ThinplatesplineLouAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'leave one out validation TPS (tin)'
+        return 'SAGA Thinplatespline (tin) leave one out validation'
 
     def displayName(self):
         """
@@ -356,7 +356,7 @@ class ThinplatesplineLouAlgorithm(QgsProcessingAlgorithm):
         contain lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'interpolation validation'
+        return 'leaveoneoutvalidation'
 
     def tr(self, string):
         return QCoreApplication.translate('Processing', string)
