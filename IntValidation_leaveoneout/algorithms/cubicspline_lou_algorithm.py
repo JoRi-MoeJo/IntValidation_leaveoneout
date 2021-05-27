@@ -93,7 +93,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
                 self.tr("Minimum number of points"),
                 QgsProcessingParameterNumber.Integer,
                 defaultValue=3,
-                minmumValue=0
+                minimumValue=0
             )
         )
 
