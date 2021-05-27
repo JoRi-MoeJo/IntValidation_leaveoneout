@@ -35,7 +35,7 @@ import sys
 import inspect
 
 from qgis.core import QgsProcessingAlgorithm, QgsApplication
-from .leaveoneout_tpstin_provider import InterpolationValidationProvider
+from .interpolationvalidation_provider import InterpolationValidationProvider
 
 cmd_folder = os.path.split(inspect.getfile(inspect.currentframe()))[0]
 

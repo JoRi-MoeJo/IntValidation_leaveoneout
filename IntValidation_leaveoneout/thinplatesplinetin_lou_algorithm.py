@@ -48,7 +48,7 @@ from qgis.core import (QgsProcessing,
 import processing
 
 
-class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
+class ThinplatesplineLouAlgorithm(QgsProcessingAlgorithm):
 
     # Constants used to refer to parameters and outputs. They will be
     # used when calling the algorithm from another algorithm, or when
@@ -362,4 +362,4 @@ class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return InterpolationValidationAlgorithm()
+        return ThinplatesplineLouAlgorithm()
