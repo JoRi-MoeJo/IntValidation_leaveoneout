@@ -37,7 +37,6 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterField,
                        QgsProcessingParameterNumber,
                        QgsProcessingParameterEnum,
-                       QgsProcessingParameterBoolean,
                        QgsProcessingParameterExtent,
                        QgsProcessingParameterRasterDestination,
                        QgsProcessingParameterFileDestination,
@@ -48,7 +47,7 @@ from qgis.core import (QgsProcessing,
 import processing
 
 
-class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
+class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
 
     # Constants used to refer to parameters and outputs. They will be
     # used when calling the algorithm from another algorithm, or when
@@ -56,10 +55,10 @@ class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
 
     SHAPES = "SHAPES"
     FIELD = "FIELD"
-    TARGET = "TARGET"
-    REGULARISATION = "REGULARISATION"
-    LEVEL = "LEVEL"
-    FRAME = "FRAME"
+    NPMIN = "NPMIN"
+    NPMAX = "NPMAX"
+    NPPC = "NPPC"
+    K = "K"
     OUTPUT_EXTENT = "OUTPUT_EXTENT"
     TARGET_USER_SIZE = "TARGET_USER_SIZE"
     TARGET_USER_FITS = "TARGET_USER_FITS"
@@ -90,35 +89,45 @@ class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                self.REGULARISATION,
-                self.tr("Regularisation of interpolation"),
-                QgsProcessingParameterNumber.Double,
-                defaultValue=0.0001,
+                self.NPMIN,
+                self.tr("Minimum number of points"),
+                QgsProcessingParameterNumber.Integer,
+                defaultValue=3,
                 minValue=0
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterEnum(
-                self.LEVEL,
-                self.tr("Decide for your level of Neighourhood"),
-                options=[
-                    self.tr("[0] immediate"),
-                    self.tr("[1] Level 1"),
-                    self.tr("[2] Level 2")
-                ],
-                defaultValue=2,
+            QgsProcessingParameterNumber(
+                self.NPMAX,
+                self.tr("Maximum number of points"),
+                QgsProcessingParameterNumber.Integer,
+                defaultValue=20,
+                minValue=11,
+                maxValue=59
             )
         )
 
         self.addParameter(
-            QgsProcessingParameterBoolean(
-                self.FRAME,
-                self.tr("Frame"),
-                defaultValue=1,
+            QgsProcessingParameterNumber(
+                self.NPPC,
+                self.tr("Number of points per quadrant"),
+                QgsProcessingParameterNumber.Double,
+                defaultValue=5,
+                minValue=1
             )
         )
 
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.K,
+                self.tr("Tolerance"),
+                QgsProcessingParameterNumber.Integer,
+                defaultValue=140,
+                minValue=0
+            )
+        )
+        
         self.addParameter(
             QgsProcessingParameterExtent(
                 self.OUTPUT_EXTENT,
@@ -186,15 +195,10 @@ class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
         #instantiating relevant data for validation output data
         point_input = self.parameterAsLayer(parameters, self.SHAPES, context)
         int_field = self.parameterAsString(parameters, self.FIELD, context)
-        regularisation = self.parameterAsDouble(parameters, self.REGULARISATION, context)
-        neighbourhood = self.parameterAsEnum(parameters, self.LEVEL, context)
-        if neighbourhood == 0:
-            neighbourhood = 'immediate'
-        elif neighbourhood == 1:
-            neighbourhood = 'Level 1'
-        elif neighbourhood == 2:
-            neighbourhood = 'Level 2'
-        frame = self.parameterAsBool(parameters, self.FRAME, context)
+        minpoints = self.parameterAsInteger(parameters, self.NPMIN, context)
+        maxpoints = self.parameterAsInteger(parameters, self.NPMAX, context)
+        ppq = self.parameterAsDouble(parameters, self.NPPC, context)
+        tolerance = self.parameterAsInteger(parameters, self.K, context)
         extent = self.parameterAsExtent(parameters, self.OUTPUT_EXTENT, context)
         cellsize = self.parameterAsDouble(parameters, self.TARGET_USER_SIZE, context)
         fit = self.parameterAsEnum(parameters, self.TARGET_USER_FITS, context)
@@ -214,13 +218,14 @@ class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
             'Features in input layer: {}'.format(point_input.featureCount())
         )
         int_info = (
-            'Interpolation method: SAGA Thin plate spline (tin)',
+            'Interpolation method: SAGA INterpolate (cubic spline)',
             'Interpolation result path: {}'.format(int_result)
         )
         int_params = (
-            'Regularisation: {}'.format(regularisation),
-            'Neighbourhood: {}'.format(neighbourhood),
-            'Frame: {}'.format(frame),
+            'Min Points: {}'.format(minpoints),
+            'Max Points: {}'.format(maxpoints),
+            'Points per quadrant: {}'.format(ppq),
+            'Tolerance: {}'.format(tolerance),
             'Output extent (xmin, ymin : xmax, ymax): {}'.format(extent.toString()),
             'Cellsize: {}'.format(cellsize),
             'Interpolation is fit to: {}'.format(fit)
@@ -332,7 +337,7 @@ class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'leave one out validation TPS (tin)'
+        return 'SAGA Cubic spline interpolation'
 
     def displayName(self):
         """
@@ -356,10 +361,10 @@ class InterpolationValidationAlgorithm(QgsProcessingAlgorithm):
         contain lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'interpolation validation'
+        return 'leaveoneoutvalidation'
 
     def tr(self, string):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return InterpolationValidationAlgorithm()
+        return CubicsplineLouAlgorithm()

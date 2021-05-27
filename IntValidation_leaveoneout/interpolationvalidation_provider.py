@@ -31,7 +31,8 @@ __copyright__ = '(C) 2021 by Johannes Ritter'
 __revision__ = '$Format:%H$'
 
 from qgis.core import QgsProcessingProvider
-from .leaveoneout_tpstin_algorithm import InterpolationValidationAlgorithm
+from .algorithms.thinplatesplinetin_lou_algorithm import ThinplatesplineLouAlgorithm
+from .algorithms.cubicspline_lou_algorithm import CubicsplineLouAlgorithm
 
 
 class InterpolationValidationProvider(QgsProcessingProvider):
@@ -53,8 +54,9 @@ class InterpolationValidationProvider(QgsProcessingProvider):
         """
         Loads all algorithms belonging to this provider.
         """
-        self.addAlgorithm(InterpolationValidationAlgorithm())
+        self.addAlgorithm(ThinplatesplineLouAlgorithm())
         # add additional algorithms here
+        self.addAlgorithm(CubicsplineLouAlgorithm())
         # self.addAlgorithm(MyOtherAlgorithm())
 
     def id(self):
@@ -63,7 +65,7 @@ class InterpolationValidationProvider(QgsProcessingProvider):
         string should be a unique, short, character only string, eg "qgis" or
         "gdal". This string should not be localised.
         """
-        return 'interpolation validation'
+        return 'LeaveoneoutValidation'
 
     def name(self):
         """
@@ -72,7 +74,7 @@ class InterpolationValidationProvider(QgsProcessingProvider):
 
         This string should be short (e.g. "Lastools") and localised.
         """
-        return self.tr('interpolation validation')
+        return self.tr('Leave one out Validation')
 
     def icon(self):
         """

@@ -35,5 +35,5 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .leaveoneout_tpstin import InterpolationValidationPlugin
+    from .interpolationvalidation import InterpolationValidationPlugin
     return InterpolationValidationPlugin()
