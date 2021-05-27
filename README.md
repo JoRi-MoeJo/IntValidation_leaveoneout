@@ -1,0 +1,2 @@
+# Validation of different interpolation methods with the leave one out method
+QGIS Processing Plugin which provides different algorithms to interpolate point shapefiles and validate the result with the leave on out method.
