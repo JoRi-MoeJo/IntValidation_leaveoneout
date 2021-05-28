@@ -195,10 +195,10 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         #instantiating relevant data for validation output data
         point_input = self.parameterAsLayer(parameters, self.SHAPES, context)
         int_field = self.parameterAsString(parameters, self.FIELD, context)
-        minpoints = self.parameterAsInteger(parameters, self.NPMIN, context)
-        maxpoints = self.parameterAsInteger(parameters, self.NPMAX, context)
+        minpoints = self.parameterAsInt(parameters, self.NPMIN, context)
+        maxpoints = self.parameterAsInt(parameters, self.NPMAX, context)
         ppq = self.parameterAsDouble(parameters, self.NPPC, context)
-        tolerance = self.parameterAsInteger(parameters, self.K, context)
+        tolerance = self.parameterAsInt(parameters, self.K, context)
         extent = self.parameterAsExtent(parameters, self.OUTPUT_EXTENT, context)
         cellsize = self.parameterAsDouble(parameters, self.TARGET_USER_SIZE, context)
         fit = self.parameterAsEnum(parameters, self.TARGET_USER_FITS, context)
