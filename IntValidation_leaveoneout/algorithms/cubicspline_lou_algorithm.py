@@ -337,7 +337,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'SAGA Cubic spline interpolation'
+        return 'Cubic spline interpolation SAGA leave one out validation'
 
     def displayName(self):
         """
@@ -361,7 +361,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         contain lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'leave one out validation'
+        return 'SAGA LOU validation'
 
     def tr(self, string):
         return QCoreApplication.translate('Processing', string)
