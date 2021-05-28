@@ -185,7 +185,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         #applying output directory for saga module
         parameters['TARGET_OUT_GRID'] = parameters['INTERPOLATION_RESULT']
         int_raster = processing.run(
-            "saga:thinplatesplinetin",
+            "saga:interpolatecubicspline",
             parameters,
             context=context,
             feedback=feedback
@@ -279,7 +279,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
             #defining the point_clone as input for the validation interpolation of saga module + running the interpolation with missing feature
             parameters['SHAPES'] = poi_clone
             val_int = processing.run(
-                "saga:thinplatesplinetin",
+                "saga:interpolatecubicspline",
                 parameters,
                 context=context,
                 feedback=feedback
@@ -361,7 +361,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         contain lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'leaveoneoutvalidation'
+        return 'leave one out validation'
 
     def tr(self, string):
         return QCoreApplication.translate('Processing', string)
