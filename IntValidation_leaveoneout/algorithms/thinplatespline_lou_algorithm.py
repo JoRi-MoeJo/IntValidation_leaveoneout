@@ -171,7 +171,7 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterExtent,
             self.tr("Output Extent"),
-            optional=True
+            optional=1
         )
 
         self.addParameter(
@@ -199,7 +199,7 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
             QgsProcessingParameterCrs(
                 self.TARGET_TEMPLATE,
                 self.tr("Target Crs system"),
-                optional=True
+                optional=1
             )
         )
 
