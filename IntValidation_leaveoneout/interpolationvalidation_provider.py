@@ -31,8 +31,9 @@ __copyright__ = '(C) 2021 by Johannes Ritter'
 __revision__ = '$Format:%H$'
 
 from qgis.core import QgsProcessingProvider
-from .algorithms.thinplatesplinetin_lou_algorithm import ThinplatesplineLouAlgorithm
+from .algorithms.thinplatesplinetin_lou_algorithm import ThinplatesplineTinLouAlgorithm
 from .algorithms.cubicspline_lou_algorithm import CubicsplineLouAlgorithm
+from .algorithms.thinplatespline_lou_algorithm import ThinplatesplineAlgorithm
 
 
 class InterpolationValidationProvider(QgsProcessingProvider):
@@ -54,9 +55,10 @@ class InterpolationValidationProvider(QgsProcessingProvider):
         """
         Loads all algorithms belonging to this provider.
         """
-        self.addAlgorithm(ThinplatesplineLouAlgorithm())
+        self.addAlgorithm(ThinplatesplineTinLouAlgorithm())
         # add additional algorithms here
         self.addAlgorithm(CubicsplineLouAlgorithm())
+        self.addAlgorithm(ThinplatesplineAlgorithm)
         # self.addAlgorithm(MyOtherAlgorithm())
 
     def id(self):
