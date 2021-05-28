@@ -58,7 +58,7 @@ class InterpolationValidationProvider(QgsProcessingProvider):
         self.addAlgorithm(ThinplatesplineTinLouAlgorithm())
         # add additional algorithms here
         self.addAlgorithm(CubicsplineLouAlgorithm())
-        self.addAlgorithm(ThinplatesplineAlgorithm)
+        self.addAlgorithm(ThinplatesplineAlgorithm())
         # self.addAlgorithm(MyOtherAlgorithm())
 
     def id(self):
