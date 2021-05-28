@@ -169,9 +169,10 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
         )
 
         self.addParameter(
-            QgsProcessingParameterExtent,
+            QgsProcessingParameterExtent(
             self.tr("Output Extent"),
             optional=1
+            )
         )
 
         self.addParameter(
