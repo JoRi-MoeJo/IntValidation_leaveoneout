@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 """
 /***************************************************************************
@@ -37,6 +37,7 @@ from qgis.core import (QgsProcessing,
                        QgsProcessingParameterField,
                        QgsProcessingParameterNumber,
                        QgsProcessingParameterEnum,
+                       QgsProcessingParameterCrs,
                        QgsProcessingParameterExtent,
                        QgsProcessingParameterRasterDestination,
                        QgsProcessingParameterFileDestination,
@@ -47,7 +48,7 @@ from qgis.core import (QgsProcessing,
 import processing
 
 
-class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
+class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
 
     # Constants used to refer to parameters and outputs. They will be
     # used when calling the algorithm from another algorithm, or when
@@ -55,13 +56,17 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
 
     SHAPES = "SHAPES"
     FIELD = "FIELD"
-    NPMIN = "NPMIN"
-    NPMAX = "NPMAX"
-    NPPC = "NPPC"
-    K = "K"
+    REGULARISATION = "REGULARISATION"
+    SEARCH_RANGE = "SEARCH_RANGE"
+    SEARCH_RADIUS = "SEARCH_RADIUS"
+    SEARCH_POINTS_ALL = "SEARCH_POINTS_ALL"
+    SEARCH_POINTS_MIN = "SEARCH_POINTS_MIN"
+    SEARCH_POINTS_MAX = "SEARCH_POINTS_MAX"
+    SEARCH_DIRECTION = "SEARCH_DIRECTION"
     OUTPUT_EXTENT = "OUTPUT_EXTENT"
     TARGET_USER_SIZE = "TARGET_USER_SIZE"
     TARGET_USER_FITS = "TARGET_USER_FITS"
+    TARGET_TEMPLATE = "TARGET_TEMPLATE"
     TARGET_OUT_GRID = "TARGET_OUT_GRID"
     INTERPOLATION_RESULT = "INTERPOLATION_RESULT"
     OUTPUT_DATA = "OUTPUT_DATA"
@@ -89,50 +94,85 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                self.NPMIN,
-                self.tr("Minimum number of points"),
+                self.REGULARISATION,
+                self.tr("Regularisation of interpolation"),
+                QgsProcessingParameterNumber.Double,
+                defaultValue=0.0001,
+                minValue=0
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.SEARCH_RANGE,
+                self.tr("Decide for your type of search range"),
+                options=[
+                    self.tr("[0] local"),
+                    self.tr("[1] global")
+                ],
+                defaultValue=0,
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.SEARCH_RADIUS,
+                self.tr("Search radius"),
+                QgsProcessingParameterNumber.Double,
+                defaultValue=1000,
+                minValue=0
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.SEARCH_POINTS_ALL,
+                self.tr("Decide how many points you want to take into account"),
+                options=[
+                    self.tr("[0] maximum number of nearest points"),
+                    self.tr("[1] all points within search area")
+                ],
+                defaultValue=0
+            )
+        )
+
+        self.addParameter(
+            QgsProcessingParameterNumber(
+                self.SEARCH_POINTS_MIN,
+                self.tr("Minimum number of points taken into account"),
                 QgsProcessingParameterNumber.Integer,
-                defaultValue=3,
+                defaultValue=16,
                 minValue=0
             )
         )
 
         self.addParameter(
             QgsProcessingParameterNumber(
-                self.NPMAX,
-                self.tr("Maximum number of points"),
+                self.SEARCH_POINTS_MAX,
+                self.tr("Maximum number of points (possibly) taken into account"),
                 QgsProcessingParameterNumber.Integer,
                 defaultValue=20,
-                minValue=11,
-                maxValue=59
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                self.NPPC,
-                self.tr("Number of points per quadrant"),
-                QgsProcessingParameterNumber.Double,
-                defaultValue=5,
-                minValue=1
-            )
-        )
-
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                self.K,
-                self.tr("Tolerance"),
-                QgsProcessingParameterNumber.Integer,
-                defaultValue=140,
                 minValue=0
             )
         )
-        
+
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.SEARCH_DIRECTION,
+                self.tr("Search direction"),
+                options=[
+                    self.tr("[0] all directions"),
+                    self.tr("[1] quadrants")
+                ],
+                defaultValue=0
+            )
+        )
+
         self.addParameter(
             QgsProcessingParameterExtent(
-                self.OUTPUT_EXTENT,
-                self.tr("define the output extent"),
-                optional=1,
+            self.OUTPUT_EXTENT,
+            self.tr("Output Extent"),
+            optional=1
             )
         )
 
@@ -186,20 +226,35 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         #applying output directory for saga module
         parameters['TARGET_OUT_GRID'] = parameters['INTERPOLATION_RESULT']
         int_raster = processing.run(
-            "saga:interpolatecubicspline",
+            "saga:thinplatespline",
             parameters,
             context=context,
             feedback=feedback
         )
         int_result = int_raster['TARGET_OUT_GRID']
 
-        #instantiating relevant data for validation output data
+        #instantiating relevant data for validation output data (.txt)
         point_input = self.parameterAsLayer(parameters, self.SHAPES, context)
         int_field = self.parameterAsString(parameters, self.FIELD, context)
-        minpoints = self.parameterAsInt(parameters, self.NPMIN, context)
-        maxpoints = self.parameterAsInt(parameters, self.NPMAX, context)
-        ppq = self.parameterAsDouble(parameters, self.NPPC, context)
-        tolerance = self.parameterAsInt(parameters, self.K, context)
+        regularisation = self.parameterAsDouble(parameters, self.REGULARISATION, context)
+        search_range_type = self.parameterAsEnum(parameters, self.SEARCH_RANGE, context)
+        if search_range_type == 0:
+            search_range_type = "local"
+        elif search_range_type == 1:
+            search_range_type = "global"
+        search_radius = self.parameterAsDouble(parameters, self.SEARCH_RADIUS, context)
+        points_search_type = self.parameterAsEnum(parameters, self.SEARCH_POINTS_ALL, context)
+        if points_search_type == 0:
+            points_search_type = "maximum number of nearest points"
+        elif points_search_type == 1:
+            points_search_type = "all points within search distance"
+        minpoints = self.parameterAsInt(parameters, self.SEARCH_POINTS_MIN, context)
+        maxpoints = self.parameterAsInt(parameters, self.SEARCH_POINTS_MAX, context)
+        search_direction = self.parameterAsEnum(parameters, self.SEARCH_DIRECTION, context)
+        if search_direction == 0:
+            search_direction = "all directions"
+        elif search_direction == 1:
+            search_direction = "quadrants"
         extent = self.parameterAsExtent(parameters, self.OUTPUT_EXTENT, context)
         cellsize = self.parameterAsDouble(parameters, self.TARGET_USER_SIZE, context)
         fit = self.parameterAsEnum(parameters, self.TARGET_USER_FITS, context)
@@ -207,6 +262,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
             fit = 'nodes'
         elif fit == 1:
             fit = 'cells'
+        target_crs = self.parameterAsCrs(parameters, self.TARGET_TEMPLATE, context)
         
         #getting fieldnames of point input layer
         fieldnames = [field.name() for field in point_input.fields()]
@@ -214,19 +270,22 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         #writing the text lines for the validation data text file with intantiated parameters
         gen_info = (
             'Input Layer: {}'.format(point_input.name()),
-            str(point_input.crs()),
+            str(target_crs),
             'Interpolation field: {}'.format(int_field),
             'Features in input layer: {}'.format(point_input.featureCount())
         )
         int_info = (
-            'Interpolation method: SAGA INterpolate (cubic spline)',
+            'Interpolation method: SAGA Thin plate spline',
             'Interpolation result path: {}'.format(int_result)
         )
         int_params = (
-            'Min Points: {}'.format(minpoints),
-            'Max Points: {}'.format(maxpoints),
-            'Points per quadrant: {}'.format(ppq),
-            'Tolerance: {}'.format(tolerance),
+            'Regularisation: {}'.format(regularisation),
+            'Search range type: {}'.format(search_range_type),
+            'Search radius: {}'.format(search_radius),
+            'points taken into account: {}'.format(points_search_type),
+            'min points: {}'.format(minpoints),
+            'max points: {}'.format(maxpoints),
+            'search direction: {}'.format(search_direction),
             'Output extent (xmin, ymin : xmax, ymax): {}'.format(extent.toString()),
             'Cellsize: {}'.format(cellsize),
             'Interpolation is fit to: {}'.format(fit)
@@ -285,7 +344,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
             #defining the point_clone as input for the validation interpolation of saga module + running the interpolation with missing feature
             parameters['SHAPES'] = poi_clone
             val_int = processing.run(
-                "saga:interpolatecubicspline",
+                "saga:thinplatespline",
                 parameters,
                 context=context,
                 feedback=feedback
@@ -345,7 +404,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         lowercase alphanumeric characters only and no spaces or other
         formatting characters.
         """
-        return 'Cubic spline interpolation SAGA leave one out validation'
+        return 'Thinplatespline SAGA leave one out validation'
 
     def displayName(self):
         """
@@ -375,4 +434,4 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Processing', string)
 
     def createInstance(self):
-        return CubicsplineLouAlgorithm()
+        return ThinplatesplineAlgorithm()
