@@ -170,6 +170,7 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
         Here is where the processing itself takes place.
         """
 
+        print("First interpolation starts now, then validation will follow.")
         #instantiating validation text file destination
         #interpolating the surface from the whole data set (int_raster)
         val_txt = self.parameterAsFileOutput(parameters, self.OUTPUT_DATA, context)
@@ -257,15 +258,17 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
                 break
             progress = int(current * total)
             feedback.setProgress(progress)
-            #testing pushinfo to console, so that user actually has a working progress
-            feedback.pushConsoleFeedback(str(progress))
+            if current == 0:
+                print("Validation just started")
+            else:
+                print("Progress of Validation: {}%".format(progress))
             
             #creating a point_clone with the one missing feature to validate
             point_input.select(feat.id())
             point_input.invertSelection()
             tempfile = QgsProcessingUtils.generateTempFilename(str(feat.id())) + '.shp'
             #printing point_clone file location to console
-            print(tempfile)
+            print("cloned shapefile: {}".format(tempfile))
             poi_clone = processing.run(
                 "native:saveselectedfeatures", {
                     'INPUT': point_input,
@@ -283,7 +286,7 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
                 feedback=feedback
             )
             #printing validation interpolation file path of the point clone to console
-            print(val_int['TARGET_OUT_GRID'])
+            print("validation interpolation of cloned shapedfile: {}".format(val_int['TARGET_OUT_GRID']))
             valraster = QgsRasterLayer(
                 val_int['TARGET_OUT_GRID'],
                 'valint_raster',
@@ -321,6 +324,8 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
                 data = ';'.join(txtdata) + '\n'
                 output_txt.write(data)
         
+        print("The interpolation file: {}".format(int_result))
+        print("The validation data in txt file: {}".format(val_txt))
         #returning interpolated raster for data set + validation data set user directories
         return {
             self.INTERPOLATION_RESULT: int_result,
