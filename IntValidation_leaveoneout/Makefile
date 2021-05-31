@@ -38,13 +38,13 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	leaveoneout_tpstin.py 
+	interpolationvalidation.py 
 
-PLUGINNAME = leaveoneout_tpstin
+PLUGINNAME = Leave one out validations for interpolations
 
 PY_FILES = \
 	__init__.py \
-	leaveoneout_tpstin.py 
+	interpolationvalidation.py 
 
 UI_FILES = 
 

@@ -3,7 +3,7 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=Interpolation validations with leave one out method
+name=Leave one out validations for interpolations
 qgisMinimumVersion=3.0
 description=leave one out validations for different QGIS interpolation methods.
 version=0.1
