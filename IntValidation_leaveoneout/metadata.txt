@@ -23,9 +23,9 @@ hasProcessingProvider=yes
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=python
+tags=interpolation, validation, leave one out, cross validation, jackknifing
 
-homepage=http://homepage
+homepage=https://github.com/JoRi-MoeJo/IntValidation_leaveoneout
 category=Analysis
 icon=icon.png
 # experimental flag
