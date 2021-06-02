@@ -17,7 +17,9 @@ The user can use the resulting validation residues to calculate statistic parame
 * open the python console in QGIS while running the plugin to properly see the progress. At the same time this is used to document all the created geodatafiles. SO with this in information you can check if everything went as intended.
 
 ## Incorporate the Plugin into your QGIS
+to be written
 
+Thanks to @jrenken for giving me a lot of helpful tipps to learn python programming in Qgis. Big thanks to @ghtmtt for helping me throughout the learning process, with file structuring, giving tipps and answering all the questions I had very informatively.
 
 ## Literature
 * Davis, B.M.(1987): Uses and Abuses of Cross-Validationin Geostatistics; Mathematical Geology, 19(3):241-248.
