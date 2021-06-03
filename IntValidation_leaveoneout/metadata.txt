@@ -27,7 +27,7 @@ tags=interpolation, validation, leave one out, cross validation, jackknifing
 
 homepage=https://github.com/JoRi-MoeJo/IntValidation_leaveoneout
 category=Analysis
-icon=icon.png
+icon=logo.png
 # experimental flag
 experimental=True
 
