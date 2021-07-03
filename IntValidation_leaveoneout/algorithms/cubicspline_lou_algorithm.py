@@ -310,7 +310,7 @@ class CubicsplineLouAlgorithm(QgsProcessingAlgorithm):
             #checking if point is part of raster
             #if so, calculating the delta of expected value (validation interpolation) - true value(input layer feature value)
             if res == False:
-                delta = 'NaN - not in interpolated area'
+                delta = 999999.999 #'NaN - not in interpolated area'
             elif res == True:
                 delta = valraster_value - poi_value
             else:
