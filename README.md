@@ -1,5 +1,5 @@
 # Validation of different interpolation methods with the leave one out method
-QGIS Processing Plugin which provides different algorithms to interpolate point shapefiles and validate the result with the leave on out method.
+QGIS Processing Plugin which provides different algorithms to interpolate point shapefiles and validate the result with the leave one out method.
 
 ## Information about method
 The leave one out method is used to validate the accuracy of interpolations. Reading through literature, one also encounters the terms cross validation and jackknifing. Many times the term cross validation is used when desrcibing and using the metod of this plugin in scientific papers. Because of potential condusion between the widely used terms of cross validation and jackknifing this plugin is only names as leave one out method because this describes the method in its core the best. The last section features some publications that were read through while getting into the topic a bit more. This plugin offers algorithms to run and validate different deterministic interpolation methods of QGIS with the leave one out method. 
