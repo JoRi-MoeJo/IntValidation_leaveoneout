@@ -10,7 +10,7 @@ version=0.1
 author=Johannes Ritter
 email=johannes.ritter95@web.de
 
-about=Plugin for the validation of different interpolation methods of qgis with the leave one out method. This method is a tool to judge the accuracy of an interpolation method and its chosen parameters. With the resulting residues between known and estimated values, the user can calculate different statistical values such as the RMSE. Further information regarding the method, results and plugin is to be found on the guthub page (homepage).
+about=Plugin for the validation of different interpolation methods of qgis (using the inteprolation methods from QGIS, SAGA,...) with the leave one out method. This method is a tool to judge the accuracy of an interpolation method and its chosen parameters. With the resulting residues between known and estimated values, the user can calculate different statistical values such as the RMSE afterwards. !!While using the Plugin it is recommended to open the Python console to have access about the progress and documentation!! Further information regarding the method, results and plugin is to be found on the guthub page (homepage).
 
 tracker=https://github.com/JoRi-MoeJo/IntValidation_leaveoneout/issues
 repository=https://github.com/JoRi-MoeJo/IntValidation_leaveoneout
