@@ -306,21 +306,17 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
             #if so, calculating the delta of expected value (validation interpolation) - true value(input layer feature value)
             if isinstance(poi_value, str):
                 try:
-                    poi_valuefloat = float(poi_value)
+                    poi_value = float(poi_value.replace(',', '.'))
                 except ValueError:
-                    print('The interpolation Field is of the type string and cant be changed to floating numbers wihtout problems')
-                else:
-                    if res == False:
-                        delta = 999999.999 #'NaN - not in interpolated area'
-                    elif res == True:
-                        delta = valraster_value - poi_value  
+                    print('!!! !!! The interpolation Field is of the type string and cant be changed to floating numbers without problems. Better to put in numbers (float or integer).')
+            
+
+            if res == False:
+                delta = 999999.999 #'NaN - not in interpolated area'
+            elif res == True:
+                delta = valraster_value - poi_value
             else:
-                if res == False:
-                    delta = 999999.999 #'NaN - not in interpolated area'
-                elif res == True:
-                    delta = valraster_value - poi_value
-                else:
-                    print('something went horribly wrong here :(')
+                print('something went horribly wrong here :(')
             
             #writing necessary documentation data + validation delta into validation text data file
             txtdata = (
