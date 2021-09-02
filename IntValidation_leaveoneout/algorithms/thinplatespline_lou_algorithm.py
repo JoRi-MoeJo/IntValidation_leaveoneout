@@ -262,7 +262,6 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
             fit = 'nodes'
         elif fit == 1:
             fit = 'cells'
-        target_crs = self.parameterAsCrs(parameters, self.TARGET_TEMPLATE, context)
         
         #getting fieldnames of point input layer
         fieldnames = [field.name() for field in point_input.fields()]
@@ -270,7 +269,7 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
         #writing the text lines for the validation data text file with intantiated parameters
         gen_info = (
             'Input Layer: {}'.format(point_input.name()),
-            str(target_crs),
+            'Crs: {}'.format(str(point_input.crs().authid())),
             'Interpolation field: {}'.format(int_field),
             'Features in input layer: {}'.format(point_input.featureCount())
         )

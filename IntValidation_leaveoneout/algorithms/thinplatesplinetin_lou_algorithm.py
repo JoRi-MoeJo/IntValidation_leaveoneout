@@ -210,7 +210,7 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
         #writing the text lines for the validation data text file with intantiated parameters
         gen_info = (
             'Input Layer: {}'.format(point_input.name()),
-            str(point_input.crs()),
+            'Crs: {}'.format(str(point_input.crs().authid())),
             'Interpolation field: {}'.format(int_field),
             'Features in input layer: {}'.format(point_input.featureCount())
         )
