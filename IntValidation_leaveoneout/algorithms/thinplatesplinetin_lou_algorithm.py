@@ -46,6 +46,7 @@ from qgis.core import (QgsProcessing,
                        QgsPointXY)
 
 import processing
+import os
 
 
 class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
@@ -243,8 +244,7 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
             output_txt.write(line2)
             line3 = ';'.join(int_params) + '\n'
             output_txt.write(line3)
-            line4 = ';'.join(header) + '\n'
-            output_txt.write(line4)
+            
         
         #changing output directory of saga module for validation steps to temporary files
         parameters['TARGET_OUT_GRID'] = QgsProcessing.TEMPORARY_OUTPUT
@@ -267,6 +267,7 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
             point_input.select(feat.id())
             point_input.invertSelection()
             tempfile = QgsProcessingUtils.generateTempFilename(str(feat.id())) + '.shp'
+            tempfolder = os.path.dirname(os.path.dirname(tempfile))
             #printing point_clone file location to console
             print("cloned shapefile: {}".format(tempfile))
             poi_clone = processing.run(
@@ -319,6 +320,16 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
                 print('something went horribly wrong here :(')
             
             #writing necessary documentation data + validation delta into validation text data file
+            filetxtdata = ('temporary data of the validation (point clones and validation interpolations) are stored in this folder: {}'.format(tempfolder))
+            
+            if current == 0:
+                with open(val_txt, 'a') as output_txt:
+                    tempfilelocation = filetxtdata + '\n'
+                    output_txt.write(tempfilelocation)
+                    headerline = ';'.join(header) + '\n'
+                    output_txt.write(headerline)
+            
+            
             txtdata = (
                 str(feat.attribute(0)),
                 '{:.4f}'.format(geom.asPoint().x()),
