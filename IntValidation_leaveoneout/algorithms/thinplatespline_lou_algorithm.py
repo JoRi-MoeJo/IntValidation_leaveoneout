@@ -46,6 +46,7 @@ from qgis.core import (QgsProcessing,
                        QgsPointXY)
 
 import processing
+import os
 
 
 class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
@@ -306,8 +307,7 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
             output_txt.write(line2)
             line3 = ';'.join(int_params) + '\n'
             output_txt.write(line3)
-            line4 = ';'.join(header) + '\n'
-            output_txt.write(line4)
+        
         
         #changing output directory of saga module for validation steps to temporary files
         parameters['TARGET_OUT_GRID'] = QgsProcessing.TEMPORARY_OUTPUT
@@ -381,7 +381,17 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
             else:
                 print('something went horribly wrong here :(')
             
+
             #writing necessary documentation data + validation delta into validation text data file
+            if current == 0:
+                tempfolder = os.path.dirname(os.path.dirname(tempfile))
+                filetxtdata = ('temporary data of the validation (point clones and validation interpolations) are stored in this folder: {}'.format(tempfolder))
+                with open (val_txt, 'a') as output_txt:
+                    tempfilelocation = filetxtdata + '\n'
+                    output_txt.write(tempfilelocation)
+                    headerline = ';'.join(header) + '\n'
+                    output_txt.write(headerline)
+
             txtdata = (
                 str(feat.attribute(0)),
                 '{:.4f}'.format(geom.asPoint().x()),
