@@ -268,6 +268,7 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
         fieldnames = [field.name() for field in point_input.fields()]
         
         #writing the text lines for the validation data text file with intantiated parameters
+        heads_up = 'Validation output file. For imports into 3rd party software with the goal of further calcuations or work, you might skip the first 5 lines, because the data table starts in line 6. Older QGIS Versions (3.16.. for example) might not delete the temporary data of the validation automatically when your system shuts down, therefore keep in mind that the validation might produce large amounts of data that you maybe want to delete.'
         gen_info = (
             'Input Layer: {}'.format(point_input.name()),
             'Crs: {}'.format(str(point_input.crs().authid())),
@@ -301,6 +302,8 @@ class ThinplatesplineAlgorithm(QgsProcessingAlgorithm):
         
         #writing information and header into validation text file
         with open(val_txt, 'w') as output_txt:
+            firstline = heads_up + '\n'
+            output_txt.write(firstline)
             line = ';'.join(int_info) + '\n'
             output_txt.write(line)
             line2 = ';'.join(gen_info) + '\n'
