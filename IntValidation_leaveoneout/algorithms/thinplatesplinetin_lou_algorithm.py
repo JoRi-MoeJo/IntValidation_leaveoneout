@@ -75,7 +75,7 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFeatureSource(
                 self.SHAPES,
-                self.tr('Input vector point layer'),
+                self.tr('Input vector point layer (further Plugin Info: https://github.com/JoRi-MoeJo/IntValidation_leaveoneout)'),
                 [QgsProcessing.TypeVectorPoint]
             )
         )
@@ -161,7 +161,7 @@ class ThinplatesplineTinLouAlgorithm(QgsProcessingAlgorithm):
         self.addParameter(
             QgsProcessingParameterFileDestination(
                 self.OUTPUT_DATA,
-                self.tr("Output for validation data as .txt file"),
+                self.tr("Output for validation data as .txt file (open python console for more information during plugin run)"),
                 'txt file (*.txt)'
             )
         )

@@ -4,13 +4,13 @@
 
 [general]
 name=Leave one out validations for interpolations
-qgisMinimumVersion=3.0
+qgisMinimumVersion=3.16.6
 description=leave one out validations for different QGIS interpolation methods.
-version=0.1
+version=1.0
 author=Johannes Ritter
 email=johannes.ritter95@web.de
 
-about=Plugin for the validation of different interpolation methods of qgis (using the inteprolation methods from QGIS, SAGA,...) with the leave one out method. This method is a tool to judge the accuracy of an interpolation method and its chosen parameters. With the resulting residues between known and estimated values, the user can calculate different statistical values such as the RMSE afterwards. !!While using the Plugin it is recommended to open the Python console to have access about the progress and documentation!! Further information regarding the method, results and plugin is to be found on the guthub page (homepage).
+about=Plugin for the validation of different interpolation methods of qgis (using the inteprolation methods from QGIS, SAGA,...) with the leave one out method. This method is a tool to judge the accuracy of an interpolation method and its chosen parameters. With the resulting residues between known and estimated values, the user can calculate different statistical values such as the RMSE afterwards. Important is that this plugin uses qgis internal interpolation algorithms from SAGA and adds a validation algorithm with the leave one out method for your chosen set of parameters. !!While using the Plugin it is recommended to open the Python console to have access to the progress and documentation!! Further information regarding the method, results and plugin is to be found on the github page (homepage).
 
 tracker=https://github.com/JoRi-MoeJo/IntValidation_leaveoneout/issues
 repository=https://github.com/JoRi-MoeJo/IntValidation_leaveoneout
@@ -23,7 +23,7 @@ hasProcessingProvider=yes
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=interpolation, validation, leave one out, cross validation, jackknifing
+tags=interpolation, spline, validation, leave one out, cross validation, jackknifing
 
 homepage=https://github.com/JoRi-MoeJo/IntValidation_leaveoneout
 category=Analysis
