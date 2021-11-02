@@ -35,9 +35,9 @@ import inspect
 from qgis.PyQt.QtGui import QIcon
 
 from qgis.core import QgsProcessingProvider
-from .algorithms.thinplatesplinetin_lou_algorithm import ThinplatesplineTinLouAlgorithm
-from .algorithms.cubicspline_lou_algorithm import CubicsplineLouAlgorithm
-from .algorithms.thinplatespline_lou_algorithm import ThinplatesplineAlgorithm
+from .validation_algorithms.thinplatesplinetin_lou_algorithm import ThinplatesplineTinLouAlgorithm
+from .validation_algorithms.cubicspline_lou_algorithm import CubicsplineLouAlgorithm
+from .validation_algorithms.thinplatespline_lou_algorithm import ThinplatesplineAlgorithm
 
 
 class InterpolationValidationProvider(QgsProcessingProvider):
