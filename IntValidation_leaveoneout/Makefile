@@ -40,7 +40,7 @@ SOURCES = \
 	__init__.py \
 	interpolationvalidation.py 
 
-PLUGINNAME = Leave one out validations for interpolations
+PLUGINNAME = intvalidation_leaveoneout
 
 PY_FILES = \
 	__init__.py \
