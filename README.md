@@ -22,7 +22,7 @@ The user can use the resulting validation residues to calculate statistic parame
 
 
 ## Incorporate the Plugin into your QGIS
-to be written, either from the repository (if uploaded) or from GitHub
+The Plugin should be available in the QGIS Repository. Therefore you can directly download and incoroprate it into your GIS by using the extensions tab and search for the plugin.
 
 GitHub:
 * download the code
