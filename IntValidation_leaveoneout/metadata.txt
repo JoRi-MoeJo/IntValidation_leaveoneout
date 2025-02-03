@@ -45,3 +45,6 @@ Category of the plugin: Raster, Vector, Database or Web
 # If the plugin can run on QGIS Server.
 server=False
 
+# license info
+license=GPL-2.0-or-later
+
